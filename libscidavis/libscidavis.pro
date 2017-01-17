@@ -31,7 +31,9 @@ DEFINES       += MANUAL_PATH="\\\"$$replace(manual.path," ","\\ ")\\\""
 !mxe {
      win32:DEFINES += QT_DLL QT_THREAD_SUPPORT
 }
-QT            += opengl qt3support network svg xml
+QT            += opengl network svg xml
+
+equals(QT_MAJOR_VERSION, 4): QT += qt3support
 
 MOC_DIR        = ../tmp/scidavis
 OBJECTS_DIR    = ../tmp/scidavis

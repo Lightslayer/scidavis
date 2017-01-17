@@ -18,7 +18,8 @@ LIBS += -L ../libscidavis -lscidavis
 POST_TARGETDEPS=../libscidavis/libscidavis.a
 
 CONFIG        += qt warn_on exceptions opengl thread zlib
-QT            += opengl qt3support network svg xml
+QT            += opengl network svg xml
+equals(QT_MAJOR_VERSION, 4): QT += qt3support
 MOC_DIR        = ../tmp/scidavis
 OBJECTS_DIR    = ../tmp/scidavis
 
