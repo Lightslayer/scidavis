@@ -96,17 +96,17 @@ int main(int argc, char *argv[]) {
 				if (i<(int)spread.columns[j].data.size()) {
 					Origin::variant value=spread.columns[j].data[i];
 					if(spread.columns[j].type ==  Origin::SpreadColumn::Label) {
-						fprintf(out,"%s ",boost::get<string>(spread.columns[j].data[i]).c_str());
+						fprintf(out,"%s ",variant_get<string>(spread.columns[j].data[i]).c_str());
 					} else {
 					   double v=0.;
 					   if (value.type() == typeid(double)) {
-							v = boost::get<double>(value);
+							v = variant_get<double>(value);
 							if(fabs(v)>2.0e-300) {
 							   fprintf(out,"%g ",v);
 							}
 						}
 					   if (value.type() == typeid(string)) {
-							fprintf(out,"%s ",boost::get<string>(value).c_str());
+							fprintf(out,"%s ",variant_get<string>(value).c_str());
 						}
 					}
 				}

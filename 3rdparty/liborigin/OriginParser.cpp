@@ -29,9 +29,21 @@
 #include "OriginParser.h"
 #include <algorithm>
 #include <cstdlib> // for atoi
-#include <boost/algorithm/string.hpp> // for iequals
 
-using namespace boost::algorithm;
+#if __cplusplus >= 201700L && (defined(NO_BOOST) && NO_BOOST)
+/* use naive ignore-case comparison for a byte string */
+inline bool iequals( const std::string& str1, const std::string& str2 ) {
+    std::string str1Cpy( str1 );
+    std::string str2Cpy( str2 );
+    std::transform( str1Cpy.begin(), str1Cpy.end(), str1Cpy.begin(), ::tolower );
+    std::transform( str2Cpy.begin(), str2Cpy.end(), str2Cpy.begin(), ::tolower );
+    return ( str1Cpy == str2Cpy );
+}
+#else
+#include <boost/algorithm/string.hpp> // for iequals
+using boost::algorithm::iequals;
+#endif
+
 using namespace Origin;
 
 vector<Origin::SpreadSheet>::difference_type OriginParser::findSpreadByName(const string& name) const

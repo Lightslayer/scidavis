@@ -2,8 +2,10 @@
 cmake_minimum_required(VERSION 2.8)
 
 # boost library headers
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
+if(!NO_BOOST) { 
+	find_package(Boost REQUIRED)
+	include_directories(${Boost_INCLUDE_DIRS})
+}
 
 # library version
 set(LIBORIGIN_VERSION_MAJOR 2)
