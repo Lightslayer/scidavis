@@ -34,6 +34,7 @@ DEFINES       += MANUAL_PATH="\\\"$$replace(manual.path," ","\\ ")\\\""
 QT            += opengl network svg xml
 
 equals(QT_MAJOR_VERSION, 4): QT += qt3support
+greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport network
 
 MOC_DIR        = ../tmp/scidavis
 OBJECTS_DIR    = ../tmp/scidavis
