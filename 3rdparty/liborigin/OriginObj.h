@@ -34,7 +34,14 @@
 #include <cstring>
 #include <ctime>
 #include <vector>
+#if __cplusplus >= 201700L && (defined(NO_BOOST) && NO_BOOST) /* use c++17 variant */
+#include <variant>       /* If using a version < C++17 use headers from https://github.com/mapbox/variant */
+using variant_get = std::get;
+#else
 #include "boost/variant.hpp"
+using boost::variant;
+using variant_get = boost::get;
+#endif
 
 using namespace std;
 
@@ -146,7 +153,7 @@ namespace Origin
 		{};
 	};
 
-	typedef boost::variant<double, string> variant;
+    typedef boost::variant<double, string> data_variant;
 
 	struct SpreadColumn
 	{
@@ -164,7 +171,7 @@ namespace Origin
 		int width;
 		unsigned int index;
 		unsigned int sheet;
-		vector<variant> data;
+        vector<data_variant> data;
 
 		SpreadColumn(const string& _name = "", unsigned int _index = 0)
 		:	name(_name)

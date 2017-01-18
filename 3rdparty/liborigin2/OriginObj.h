@@ -34,8 +34,15 @@
 
 #include <string.h>
 #include <vector>
+#if __cplusplus >= 201700L && (defined(NO_BOOST) && NO_BOOST)
+#include <variant>
+#include <bind>
+#else
 #include "boost/variant.hpp"
 #include "boost/bind.hpp"
+using boost::variant;
+using boost::bind;
+#endif
 #include <ctime>
 #include <algorithm>
 
@@ -149,7 +156,7 @@ namespace Origin
 		{};
 	};
 
-	typedef boost::variant<double, string> variant;
+	typedef variant<double, string> data_variant;
 
 	struct SpreadColumn
 	{
@@ -168,7 +175,7 @@ namespace Origin
 		unsigned int index;
 		unsigned int colIndex;
 		unsigned int sheet;
-		vector<variant> data;
+		vector<data_variant> data;
 
 		SpreadColumn(const string& _name = "", unsigned int _index = 0)
 		:	name(_name)
@@ -739,8 +746,8 @@ namespace Origin
 		bool is3D() const
 		{
 			return curves.end() != find_if(curves.begin(), curves.end(),
-											boost::bind(logical_or<bool>(), boost::bind(&GraphCurve::type, _1) == GraphCurve::Line3D,  
-											boost::bind(&GraphCurve::type, _1) == GraphCurve::Mesh3D));
+											bind(logical_or<bool>(), bind(&GraphCurve::type, _1) == GraphCurve::Line3D,
+											bind(&GraphCurve::type, _1) == GraphCurve::Mesh3D));
 		}
 	};
 

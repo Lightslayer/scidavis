@@ -31,9 +31,13 @@
 #include "OriginFile.h"
 #include <iostream>
 #include <fstream>
+#if __cplusplus >= 201103L
+typedef static_cast<int> int_lexical_cast;
+#else
 #include <boost/lexical_cast.hpp>
+typedef boost::lexical_cast<unsigned int> int_lexical_cast;
+#endif
 
-using namespace boost;
 
 OriginFile::OriginFile(const string& fileName)
 :	fileVersion(0)
@@ -57,7 +61,7 @@ OriginFile::OriginFile(const string& fileName)
 	unsigned char majVers;
 	file.seekg(0x5, ios_base::beg);
 	file >> majVers;
-	int majVersion = lexical_cast<unsigned int>(majVers);
+	int majVersion = int_lexical_cast(majVers);
 
 	string vers(4, 0);
 	file.seekg(0x7, ios_base::beg);

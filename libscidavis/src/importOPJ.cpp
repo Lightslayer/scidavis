@@ -242,7 +242,7 @@ bool ImportOPJ::importTables(const OriginFile &opj)
 						for (int i=0; i < std::min((int)column.data.size(), maxrows); ++i) {
 							value = column.data[i];
 							if (value.type() == typeid(double)) {
-								datavalue = boost::get<double>(value);
+								datavalue = variant_get<double>(value);
 								if (datavalue==_ONAN) continue;
 								scidavis_column->setValueAt(i, datavalue);
 							}
@@ -275,7 +275,7 @@ bool ImportOPJ::importTables(const OriginFile &opj)
 					}
 			case Origin::Text:
 				for (int i=0; i < min((int)column.data.size(), maxrows); ++i)
-					scidavis_column->setTextAt(i, boost::get<string>(column.data[i]).c_str());
+					scidavis_column->setTextAt(i, variant_get<string>(column.data[i]).c_str());
 				table->column(j)->setColumnMode(SciDAVis::Text);
 				break;
 			case Origin::Date:
@@ -332,7 +332,7 @@ bool ImportOPJ::importTables(const OriginFile &opj)
 							format="dd.MM.yyyy";
 					}
 					for (int i=0; i < min((int)column.data.size(), maxrows); ++i)
-						scidavis_column->setValueAt(i, boost::get<double>(column.data[i]));
+						scidavis_column->setValueAt(i, variant_get<double>(column.data[i]));
 					table->column(j)->setColumnMode(SciDAVis::DateTime);
 					DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(scidavis_column->outputFilter());
 					filter->setFormat(format);
@@ -376,7 +376,7 @@ bool ImportOPJ::importTables(const OriginFile &opj)
 							break;
 					}
 					for (int i=0; i < min((int)column.data.size(), maxrows); ++i)
-						scidavis_column->setValueAt(i, boost::get<double>(column.data[i]));
+						scidavis_column->setValueAt(i, variant_get<double>(column.data[i]));
 					table->column(j)->setColumnMode(SciDAVis::DateTime);
 					DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(table->column(j)->outputFilter());
 					filter->setFormat(format);
@@ -396,7 +396,7 @@ bool ImportOPJ::importTables(const OriginFile &opj)
 							break;
 					}
 					for (int i=0; i < min((int)column.data.size(), maxrows); ++i)
-						scidavis_column->setValueAt(i, boost::get<double>(column.data[i]));
+						scidavis_column->setValueAt(i, variant_get<double>(column.data[i]));
 					table->column(j)->setColumnMode(SciDAVis::Month);
 					DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(table->column(j)->outputFilter());
 					filter->setFormat(format);
@@ -417,7 +417,7 @@ bool ImportOPJ::importTables(const OriginFile &opj)
 							break;
 					}
 					for (int i=0; i < min((int)column.data.size(), maxrows); ++i)
-						scidavis_column->setValueAt(i, boost::get<double>(column.data[i]));
+						scidavis_column->setValueAt(i, variant_get<double>(column.data[i]));
 					table->column(j)->setColumnMode(SciDAVis::Day);
 					DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(table->column(j)->outputFilter());
 					filter->setFormat(format);

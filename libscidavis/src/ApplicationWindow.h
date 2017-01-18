@@ -32,10 +32,20 @@
 #define APPLICATION_H
 
 #include <QMainWindow>
+#if QT_VERSION_MAJOR > 4
+#include <QTableView>
+#include <QTableWidgetItem>
+typedef QTableView ProxyTableView;
+typedef QTableWidgetItem ProxyTableViewItem;
+#else
 #include <Q3ListView>
 #include <Q3Header>
+typedef Q3ListView ProxyTableView;
+typedef ProxyTableViewItem ProxyTableViewItem;
+#endif
 #ifdef SEARCH_FOR_UPDATES
-#include <QHttp>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #endif
 #include <QFile>
 #include <QSplitter>
@@ -420,12 +430,12 @@ public slots:
 	void renameActiveWindow();
 
 	//!  Called when the user presses F2 and an item is selected in lv.
-	void renameWindow(Q3ListViewItem *item, int, const QString &s);
+    void renameWindow(ProxyTableViewItem *item, int, const QString &s);
 
 	//!  Checks weather the new window name is valid and modifies the name.
 	bool renameWindow(MyWidget *w, const QString &text);
 
-	void maximizeWindow(Q3ListViewItem * lbi);
+    void maximizeWindow(ProxyTableViewItem * lbi);
 	void maximizeWindow();
 	void minimizeWindow();
     //! Changes the geometry of the active MDI window
@@ -626,7 +636,7 @@ public slots:
 	void showCurvePlotDialog();
 	void showCurveWorksheet();
     void showCurveWorksheet(Graph *g, int curveIndex);
-	void showWindowPopupMenu(Q3ListViewItem *it, const QPoint &p, int);
+    void showWindowPopupMenu(ProxyTableViewItem *it, const QPoint &p, int);
 
 	//! Connected to the context menu signal from lv; it's called when there are several items selected in the list
 	void showListViewSelectionMenu(const QPoint &p);
@@ -779,9 +789,9 @@ public slots:
 	bool changeFolder(Folder *newFolder, bool force = false);
 
 	//! Changes the current folder when the user changes the current item in the QListView "folders"
-	void folderItemChanged(Q3ListViewItem *it);
+    void folderItemChanged(ProxyTableViewItem *it);
 	//! Changes the current folder when the user double-clicks on a folder item in the QListView "lv"
-	void folderItemDoubleClicked(Q3ListViewItem *it);
+    void folderItemDoubleClicked(ProxyTableViewItem *it);
 
 	//!  creates and opens the context menu of a folder list view item
 	/**
@@ -790,19 +800,19 @@ public slots:
 	 * \param fromFolders: true means that the user clicked right mouse buttom on an item from QListView "folders"
 	 *					   false means that the user clicked right mouse buttom on an item from QListView "lv"
 	 */
-	void showFolderPopupMenu(Q3ListViewItem *it, const QPoint &p, bool fromFolders);
+    void showFolderPopupMenu(ProxyTableViewItem *it, const QPoint &p, bool fromFolders);
 
 	//!  connected to the SIGNAL contextMenuRequested from the list views
-	void showFolderPopupMenu(Q3ListViewItem *it, const QPoint &p, int);
+    void showFolderPopupMenu(ProxyTableViewItem *it, const QPoint &p, int);
 
 	//!  starts renaming the selected folder by creating a built-in text editor
 	void startRenameFolder();
 
 	//!  starts renaming the selected folder by creating a built-in text editor
-	void startRenameFolder(Q3ListViewItem *item);
+    void startRenameFolder(ProxyTableViewItem *item);
 
 	//!  checks weather the new folder name is valid and modifies the name
-	void renameFolder(Q3ListViewItem *it, int col, const QString &text);
+    void renameFolder(ProxyTableViewItem *it, int col, const QString &text);
 
 	//!  forces showing all windows in the current folder and subfolders, depending on the user's viewing policy
 	void showAllFolderWindows();
@@ -848,10 +858,10 @@ public slots:
 			  bool caseSensitive, bool partialMatch, bool subfolders);
 
 	//!  initializes the list of items dragged by the user
-	void dragFolderItems(QList<Q3ListViewItem *> items){draggedItems = items;};
+    void dragFolderItems(QList<ProxyTableViewItem *> items){draggedItems = items;};
 
 	//!  Drop the objects in the list draggedItems to the folder of the destination item
-	void dropFolderItems(Q3ListViewItem *dest);
+    void dropFolderItems(ProxyTableViewItem *dest);
 
 	//!  moves a folder item to another
 	/**
@@ -1026,13 +1036,18 @@ private:
 	int convertOldToNewColorIndex(int cindex);
 
 	//! Stores the pointers to the dragged items from the FolderListViews objects
-	QList<Q3ListViewItem *> draggedItems;
+    QList<ProxyTableViewItem *> draggedItems;
     
     QString helpFilePath;
 
-#ifdef SEARCH_FOR_UPDATES
+#if defined(SEARCH_FOR_UPDATES)
+#if  QT_VERSION_MAJOR < 5
 	//! Used when checking for new versions
-	QHttp http;
+    QHttp http;
+#else
+    QNetworkAccessManager httpManager;
+    QNetworkReply httpReply;
+#endif
 	//! Used when checking for new versions
 	QBuffer version_buffer;
 #endif

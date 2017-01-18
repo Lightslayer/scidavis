@@ -187,8 +187,8 @@ Folder* Folder::rootFolder()
  *
  *****************************************************************************/
 
-FolderListItem::FolderListItem( Q3ListView *parent, Folder *f )
-    : Q3ListViewItem( parent )
+FolderListItem::FolderListItem( ProxyTableView *parent, Folder *f )
+    : ProxyTableViewItem( parent )
 {
     myFolder = f;
 
@@ -200,7 +200,7 @@ FolderListItem::FolderListItem( Q3ListView *parent, Folder *f )
 }
 
 FolderListItem::FolderListItem( FolderListItem *parent, Folder *f )
-    : Q3ListViewItem( parent )
+    : ProxyTableViewItem( parent )
 {
     myFolder = f;
 
@@ -239,7 +239,7 @@ return false;
  *****************************************************************************/
 
 FolderListView::FolderListView( QWidget *parent, const QString name )
-	: Q3ListView( parent, name.toLocal8Bit().constData() ), mousePressed( false )
+	: ProxyTableView( parent, name.toLocal8Bit().constData() ), mousePressed( false )
 {
     setAcceptDrops( true );
     viewport()->setAcceptDrops( true );
@@ -247,7 +247,7 @@ FolderListView::FolderListView( QWidget *parent, const QString name )
 
 void FolderListView::startDrag()
 {
-Q3ListViewItem *item = currentItem();
+ProxyTableViewItem *item = currentItem();
 if (!item)
 	return;
 
@@ -265,7 +265,7 @@ else
 Q3IconDrag *drag = new Q3IconDrag(viewport());
 drag->setPixmap(pix, QPoint(pix.width()/2, pix.height()/2 ) );
 
-QList<Q3ListViewItem *> lst;
+QList<ProxyTableViewItem *> lst;
 for (item = firstChild(); item; item = item->itemBelow())
 	{
 	if (item->isSelected())
@@ -278,7 +278,7 @@ drag->drag();
 
 void FolderListView::contentsDropEvent( QDropEvent *e )
 {
-Q3ListViewItem *dest = itemAt( contentsToViewport(e->pos()) );
+ProxyTableViewItem *dest = itemAt( contentsToViewport(e->pos()) );
 if ( dest && dest->rtti() == FolderListItem::RTTI)
 	{
 	emit dropItems(dest);
@@ -295,9 +295,9 @@ if (isRenaming())
 	e->ignore();
 	return;
 	}
-Q3ListViewItem *item = currentItem();
+ProxyTableViewItem *item = currentItem();
 if (!item) {
-	Q3ListView::keyPressEvent ( e );
+	ProxyTableView::keyPressEvent ( e );
 	return;
 }
 
@@ -329,7 +329,7 @@ else if(e->key() == Qt::Key_F8)
 	e->accept();
 	}
 else
-	Q3ListView::keyPressEvent ( e );
+	ProxyTableView::keyPressEvent ( e );
 }
 
 void FolderListView::contentsMouseDoubleClickEvent( QMouseEvent* e )
@@ -340,15 +340,15 @@ void FolderListView::contentsMouseDoubleClickEvent( QMouseEvent* e )
 		return;
 		}
 
-	Q3ListView::contentsMouseDoubleClickEvent( e );
+	ProxyTableView::contentsMouseDoubleClickEvent( e );
 }
 
 void FolderListView::contentsMousePressEvent( QMouseEvent* e )
 {
-Q3ListView::contentsMousePressEvent(e);
+ProxyTableView::contentsMousePressEvent(e);
 if (e->button() != Qt::LeftButton) return;
 QPoint p( contentsToViewport( e->pos() ) );
-Q3ListViewItem *i = itemAt( p );
+ProxyTableViewItem *i = itemAt( p );
 
 if ( i )
 		{// if the user clicked into the root decoration of the item, don't try to start a drag!
@@ -367,7 +367,7 @@ void FolderListView::contentsMouseMoveEvent( QMouseEvent* e )
 if ( mousePressed && ( presspos - e->pos() ).manhattanLength() > QApplication::startDragDistance() )
 	{
 	mousePressed = false;
-	Q3ListViewItem *item = itemAt( contentsToViewport(presspos) );
+	ProxyTableViewItem *item = itemAt( contentsToViewport(presspos) );
 	if ( item )
 		startDrag();
     }
@@ -385,8 +385,8 @@ for (int i=0; i < columns (); i++)
  *
  *****************************************************************************/
 
-WindowListItem::WindowListItem( Q3ListView *parent, MyWidget *w )
-    : Q3ListViewItem( parent )
+WindowListItem::WindowListItem( ProxyTableView *parent, MyWidget *w )
+    : ProxyTableViewItem( parent )
 {
     myWindow = w;
 

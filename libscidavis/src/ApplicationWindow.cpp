@@ -235,23 +235,23 @@ ApplicationWindow::ApplicationWindow()
 	folders->header()->setClickEnabled( false );
 	folders->addColumn( tr("Folder") );
 	folders->setRootIsDecorated( true );
-	folders->setResizeMode(Q3ListView::LastColumn);
+	folders->setResizeMode(ProxyTableView::LastColumn);
 	folders->header()->hide();
-	folders->setSelectionMode(Q3ListView::Single);
-	folders->setDefaultRenameAction(Q3ListView::Accept);
+	folders->setSelectionMode(ProxyTableView::Single);
+	folders->setDefaultRenameAction(ProxyTableView::Accept);
 
-	connect(folders, SIGNAL(currentChanged(Q3ListViewItem *)),
-			this, SLOT(folderItemChanged(Q3ListViewItem *)));
-	connect(folders, SIGNAL(itemRenamed(Q3ListViewItem *, int, const QString &)),
-			this, SLOT(renameFolder(Q3ListViewItem *, int, const QString &)));
-	connect(folders, SIGNAL(contextMenuRequested(Q3ListViewItem *, const QPoint &, int)),
-			this, SLOT(showFolderPopupMenu(Q3ListViewItem *, const QPoint &, int)));
-	connect(folders, SIGNAL(dragItems(QList<Q3ListViewItem *>)),
-			this, SLOT(dragFolderItems(QList<Q3ListViewItem *>)));
-	connect(folders, SIGNAL(dropItems(Q3ListViewItem *)),
-			this, SLOT(dropFolderItems(Q3ListViewItem *)));
-	connect(folders, SIGNAL(renameItem(Q3ListViewItem *)),
-			this, SLOT(startRenameFolder(Q3ListViewItem *)));
+	connect(folders, SIGNAL(currentChanged(ProxyTableViewItem *)),
+			this, SLOT(folderItemChanged(ProxyTableViewItem *)));
+	connect(folders, SIGNAL(itemRenamed(ProxyTableViewItem *, int, const QString &)),
+			this, SLOT(renameFolder(ProxyTableViewItem *, int, const QString &)));
+	connect(folders, SIGNAL(contextMenuRequested(ProxyTableViewItem *, const QPoint &, int)),
+			this, SLOT(showFolderPopupMenu(ProxyTableViewItem *, const QPoint &, int)));
+	connect(folders, SIGNAL(dragItems(QList<ProxyTableViewItem *>)),
+			this, SLOT(dragFolderItems(QList<ProxyTableViewItem *>)));
+	connect(folders, SIGNAL(dropItems(ProxyTableViewItem *)),
+			this, SLOT(dropFolderItems(ProxyTableViewItem *)));
+	connect(folders, SIGNAL(renameItem(ProxyTableViewItem *)),
+			this, SLOT(startRenameFolder(ProxyTableViewItem *)));
 	connect(folders, SIGNAL(addFolderItem()), this, SLOT(addFolder()));
 	connect(folders, SIGNAL(deleteSelection()), this, SLOT(deleteSelectedItems()));
 
@@ -264,10 +264,10 @@ ApplicationWindow::ApplicationWindow()
 	lv->addColumn (tr("View"),-1 );
 	lv->addColumn (tr("Created"),-1);
 	lv->addColumn (tr("Label"),-1);
-	lv->setResizeMode(Q3ListView::LastColumn);
+	lv->setResizeMode(ProxyTableView::LastColumn);
 	lv->setMinimumHeight(80);
-	lv->setSelectionMode(Q3ListView::Extended);
-	lv->setDefaultRenameAction(Q3ListView::Accept);
+	lv->setSelectionMode(ProxyTableView::Extended);
+	lv->setDefaultRenameAction(ProxyTableView::Accept);
 
 	explorerSplitter->addWidget(folders);
 	explorerSplitter->addWidget(lv);
@@ -316,20 +316,20 @@ ApplicationWindow::ApplicationWindow()
 
 	connect(this, SIGNAL(modified()),this, SLOT(modifiedProject()));
 	connect(d_workspace, SIGNAL(windowActivated (QWidget*)),this, SLOT(windowActivated(QWidget*)));
-	connect(lv, SIGNAL(doubleClicked(Q3ListViewItem *)),
-			this, SLOT(folderItemDoubleClicked(Q3ListViewItem *)));
-	connect(lv, SIGNAL(contextMenuRequested(Q3ListViewItem *, const QPoint &, int)),
-			this, SLOT(showWindowPopupMenu(Q3ListViewItem *, const QPoint &, int)));
-	connect(lv, SIGNAL(dragItems(QList<Q3ListViewItem *>)),
-			this, SLOT(dragFolderItems(QList<Q3ListViewItem *>)));
-	connect(lv, SIGNAL(dropItems(Q3ListViewItem *)),
-			this, SLOT(dropFolderItems(Q3ListViewItem *)));
-	connect(lv, SIGNAL(renameItem(Q3ListViewItem *)),
-			this, SLOT(startRenameFolder(Q3ListViewItem *)));
+	connect(lv, SIGNAL(doubleClicked(ProxyTableViewItem *)),
+			this, SLOT(folderItemDoubleClicked(ProxyTableViewItem *)));
+	connect(lv, SIGNAL(contextMenuRequested(ProxyTableViewItem *, const QPoint &, int)),
+			this, SLOT(showWindowPopupMenu(ProxyTableViewItem *, const QPoint &, int)));
+	connect(lv, SIGNAL(dragItems(QList<ProxyTableViewItem *>)),
+			this, SLOT(dragFolderItems(QList<ProxyTableViewItem *>)));
+	connect(lv, SIGNAL(dropItems(ProxyTableViewItem *)),
+			this, SLOT(dropFolderItems(ProxyTableViewItem *)));
+	connect(lv, SIGNAL(renameItem(ProxyTableViewItem *)),
+			this, SLOT(startRenameFolder(ProxyTableViewItem *)));
 	connect(lv, SIGNAL(addFolderItem()), this, SLOT(addFolder()));
 	connect(lv, SIGNAL(deleteSelection()), this, SLOT(deleteSelectedItems()));
-	connect(lv, SIGNAL(itemRenamed(Q3ListViewItem *, int, const QString &)),
-			this, SLOT(renameWindow(Q3ListViewItem *, int, const QString &)));
+	connect(lv, SIGNAL(itemRenamed(ProxyTableViewItem *, int, const QString &)),
+			this, SLOT(renameWindow(ProxyTableViewItem *, int, const QString &)));
 	connect(scriptEnv, SIGNAL(error(const QString&,const QString&,int)),
 			this, SLOT(scriptError(const QString&,const QString&,int)));
 	connect(scriptEnv, SIGNAL(print(const QString&)), this, SLOT(scriptPrint(const QString&)));
@@ -1527,35 +1527,35 @@ void ApplicationWindow::plotVectXYAM()
 
 void ApplicationWindow::renameListViewItem(const QString& oldName,const QString& newName)
 {
-	Q3ListViewItem *it=lv->findItem (oldName,0, Q3ListView::ExactMatch | Qt::CaseSensitive );
+	ProxyTableViewItem *it=lv->findItem (oldName,0, ProxyTableView::ExactMatch | Qt::CaseSensitive );
 	if (it)
 		it->setText(0,newName);
 }
 
 void ApplicationWindow::setListViewLabel(const QString& caption,const QString& label)
 {
-	Q3ListViewItem *it=lv->findItem ( caption, 0, Q3ListView::ExactMatch | Qt::CaseSensitive );
+	ProxyTableViewItem *it=lv->findItem ( caption, 0, ProxyTableView::ExactMatch | Qt::CaseSensitive );
 	if (it)
 		it->setText(5,label);
 }
 
 void ApplicationWindow::setListViewDate(const QString& caption,const QString& date)
 {
-	Q3ListViewItem *it=lv->findItem ( caption, 0, Q3ListView::ExactMatch | Qt::CaseSensitive );
+	ProxyTableViewItem *it=lv->findItem ( caption, 0, ProxyTableView::ExactMatch | Qt::CaseSensitive );
 	if (it)
 		it->setText(4,date);
 }
 
 void ApplicationWindow::setListView(const QString& caption,const QString& view)
 {
-	Q3ListViewItem *it=lv->findItem ( caption,0, Q3ListView::ExactMatch | Qt::CaseSensitive );
+	ProxyTableViewItem *it=lv->findItem ( caption,0, ProxyTableView::ExactMatch | Qt::CaseSensitive );
 	if (it)
 		it->setText(2,view);
 }
 
 QString ApplicationWindow::listViewDate(const QString& caption)
 {
-	Q3ListViewItem *it=lv->findItem (caption,0, Q3ListView::ExactMatch | Qt::CaseSensitive );
+	ProxyTableViewItem *it=lv->findItem (caption,0, ProxyTableView::ExactMatch | Qt::CaseSensitive );
 	if (it)
 		return it->text(4);
 	else
@@ -5117,7 +5117,7 @@ void ApplicationWindow::renameActiveWindow()
 	rwd->exec();
 }
 
-void ApplicationWindow::renameWindow(Q3ListViewItem *item, int, const QString &text)
+void ApplicationWindow::renameWindow(ProxyTableViewItem *item, int, const QString &text)
 {
 	if (!item)
 		return;
@@ -7341,7 +7341,7 @@ void ApplicationWindow::activateWindow(MyWidget *w)
 	emit modified();
 }
 
-void ApplicationWindow::maximizeWindow(Q3ListViewItem * lbi)
+void ApplicationWindow::maximizeWindow(ProxyTableViewItem * lbi)
 {
 	if (!lbi || lbi->rtti() == FolderListItem::RTTI)
 		return;
@@ -7440,7 +7440,7 @@ void ApplicationWindow::closeWindow(MyWidget* window)
 	window->folder()->removeWindow(window);
 
 	//update list view in project explorer
-	Q3ListViewItem *it=lv->findItem (window->name(), 0, Q3ListView::ExactMatch|Q3ListView::CaseSensitive);
+	ProxyTableViewItem *it=lv->findItem (window->name(), 0, ProxyTableView::ExactMatch|ProxyTableView::CaseSensitive);
 	if (it)
 		lv->takeItem(it);
 
@@ -7721,8 +7721,8 @@ void ApplicationWindow::deleteSelectedItems()
 		return;
 	}
 
-	Q3ListViewItem *item;
-	QList<Q3ListViewItem *> lst;
+	ProxyTableViewItem *item;
+	QList<ProxyTableViewItem *> lst;
 	for (item = lv->firstChild(); item; item = item->nextSibling())
 	{
 		if (item->isSelected())
@@ -7770,7 +7770,7 @@ void ApplicationWindow::showListViewPopupMenu(const QPoint &p)
 	cm.exec(p);
 }
 
-void ApplicationWindow::showWindowPopupMenu(Q3ListViewItem *it, const QPoint &p, int)
+void ApplicationWindow::showWindowPopupMenu(ProxyTableViewItem *it, const QPoint &p, int)
 {
 	if (folders->isRenaming())
 		return;
@@ -7781,7 +7781,7 @@ void ApplicationWindow::showWindowPopupMenu(Q3ListViewItem *it, const QPoint &p,
 		return;
 	}
 
-	Q3ListViewItem *item;
+	ProxyTableViewItem *item;
 	int selected = 0;
 	for (item = lv->firstChild(); item; item = item->nextSibling())
 	{
@@ -7817,7 +7817,7 @@ void ApplicationWindow::showTable(const QString& curve)
 	w->deselectAll();
 	w->setCellsSelected(0, colIndex, w->d_future_table->rowCount()-1, colIndex);
 	w->showMaximized();
-	Q3ListViewItem *it=lv->findItem (w->name(), 0, Q3ListView::ExactMatch | Qt::CaseSensitive );
+	ProxyTableViewItem *it=lv->findItem (w->name(), 0, ProxyTableView::ExactMatch | Qt::CaseSensitive );
 	if (it)
 		it->setText(2,tr("Maximized"));
 	emit modified();
@@ -12463,12 +12463,12 @@ void ApplicationWindow::saveFolderAsProject(Folder *f)
 	}
 }
 
-void ApplicationWindow::showFolderPopupMenu(Q3ListViewItem *it, const QPoint &p, int)
+void ApplicationWindow::showFolderPopupMenu(ProxyTableViewItem *it, const QPoint &p, int)
 {
 	showFolderPopupMenu(it, p, true);
 }
 
-void ApplicationWindow::showFolderPopupMenu(Q3ListViewItem *it, const QPoint &p, bool fromFolders)
+void ApplicationWindow::showFolderPopupMenu(ProxyTableViewItem *it, const QPoint &p, bool fromFolders)
 {
 	if (!it || folders->isRenaming())
 		return;
@@ -12565,19 +12565,19 @@ void ApplicationWindow::startRenameFolder()
 	if (!fi)
 		return;
 
-	disconnect(folders, SIGNAL(currentChanged(Q3ListViewItem *)), this, SLOT(folderItemChanged(Q3ListViewItem *)));
+	disconnect(folders, SIGNAL(currentChanged(ProxyTableViewItem *)), this, SLOT(folderItemChanged(ProxyTableViewItem *)));
 	fi->setRenameEnabled (0, true);
 	fi->startRename (0);
 }
 
-void ApplicationWindow::startRenameFolder(Q3ListViewItem *item)
+void ApplicationWindow::startRenameFolder(ProxyTableViewItem *item)
 {
 	if (!item || item == folders->firstChild())
 		return;
 
 	if (item->listView() == lv && item->rtti() == FolderListItem::RTTI)
 	{
-        disconnect(folders, SIGNAL(currentChanged(Q3ListViewItem *)), this, SLOT(folderItemChanged(Q3ListViewItem *)));
+        disconnect(folders, SIGNAL(currentChanged(ProxyTableViewItem *)), this, SLOT(folderItemChanged(ProxyTableViewItem *)));
 		current_folder = ((FolderListItem *)item)->folder();
 		FolderListItem *it = current_folder->folderListItem();
 		it->setRenameEnabled (0, true);
@@ -12590,7 +12590,7 @@ void ApplicationWindow::startRenameFolder(Q3ListViewItem *item)
 	}
 }
 
-void ApplicationWindow::renameFolder(Q3ListViewItem *it, int col, const QString &text)
+void ApplicationWindow::renameFolder(ProxyTableViewItem *it, int col, const QString &text)
 {
 	Q_UNUSED(col)
 
@@ -12623,8 +12623,8 @@ void ApplicationWindow::renameFolder(Q3ListViewItem *it, int col, const QString 
 
 	current_folder->setName(text);
 	it->setRenameEnabled (0, false);
-	connect(folders, SIGNAL(currentChanged(Q3ListViewItem *)),
-			this, SLOT(folderItemChanged(Q3ListViewItem *)));
+	connect(folders, SIGNAL(currentChanged(ProxyTableViewItem *)),
+			this, SLOT(folderItemChanged(ProxyTableViewItem *)));
 	folders->setCurrentItem(parent->folderListItem());//update the list views
 }
 
@@ -12860,7 +12860,7 @@ void ApplicationWindow::deleteFolder()
 	folders->setFocus();
 }
 
-void ApplicationWindow::folderItemDoubleClicked(Q3ListViewItem *it)
+void ApplicationWindow::folderItemDoubleClicked(ProxyTableViewItem *it)
 {
 	if (!it)
 		return;
@@ -12887,7 +12887,7 @@ void ApplicationWindow::folderItemDoubleClicked(Q3ListViewItem *it)
 	}
 }
 
-void ApplicationWindow::folderItemChanged(Q3ListViewItem *it)
+void ApplicationWindow::folderItemChanged(ProxyTableViewItem *it)
 {
 	if (!it)
 		return;
@@ -13183,14 +13183,14 @@ void ApplicationWindow::find(const QString& s, bool windowNames, bool labels,
 			tr("Sorry, no match found for string: '%1'").arg(s));
 }
 
-void ApplicationWindow::dropFolderItems(Q3ListViewItem *dest)
+void ApplicationWindow::dropFolderItems(ProxyTableViewItem *dest)
 {
 	if (!dest || draggedItems.isEmpty ())
 		return;
 
 	Folder *dest_f = ((FolderListItem *)dest)->folder();
 
-	Q3ListViewItem *it;
+	ProxyTableViewItem *it;
 	QStringList subfolders = dest_f->subfolders();
 
 	foreach(it, draggedItems)

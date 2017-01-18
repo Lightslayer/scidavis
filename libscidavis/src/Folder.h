@@ -150,10 +150,10 @@ protected:
  *
  *****************************************************************************/
 //! Windows list item class
-class WindowListItem : public Q3ListViewItem
+class WindowListItem : public ProxyTableViewItem
 {
 public:
-    WindowListItem( Q3ListView *parent, MyWidget *w );
+    WindowListItem( ProxyTableView *parent, MyWidget *w );
 
     MyWidget *window() { return myWindow; };
 
@@ -167,10 +167,10 @@ protected:
  *
  *****************************************************************************/
 //! Folders list item class
-class FolderListItem : public Q3ListViewItem
+class FolderListItem : public ProxyTableViewItem
 {
 public:
-    FolderListItem( Q3ListView *parent, Folder *f );
+    FolderListItem( ProxyTableView *parent, Folder *f );
     FolderListItem( FolderListItem *parent, Folder *f );
 
 	enum {RTTI = 1001};
@@ -197,7 +197,7 @@ protected:
  *
  *****************************************************************************/
 //! Folder list view class
-class FolderListView : public Q3ListView
+class FolderListView : public ProxyTableView
 {
     Q_OBJECT
 
@@ -219,9 +219,9 @@ protected:
 	void enterEvent(QEvent *){mousePressed = false;};
 
 signals:
-	void dragItems(QList<Q3ListViewItem *> items);
-	void dropItems(Q3ListViewItem *dest);
-	void renameItem(Q3ListViewItem *item);
+	void dragItems(QList<ProxyTableViewItem *> items);
+	void dropItems(ProxyTableViewItem *dest);
+	void renameItem(ProxyTableViewItem *item);
 	void addFolderItem();
 	void deleteSelection();
 
