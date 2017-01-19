@@ -7,6 +7,10 @@
 #https://qwt.svn.sourceforge.net/svnroot/qwt/trunk
 #https://github.com/sfalexrog/python-xcompile
 
+#TODO:
+#https://github.com/glennrp/libpng/tree/master
+#https://github.com/madler/zlib
+
 cmake_minimum_required(VERSION 2.8)
 include(ExternalProject)
 
@@ -17,6 +21,30 @@ else()
 FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 endif()
+
+if(CMAKE_CROSSCOMPILING OR win32)
+    # Note the following CMakeLists could be used instead of autotools
+	#https://github.com/ampl/gsl/blob/master/CMakeLists.txt
+	ExternalProject_Add(CloneGSL
+		PREFIX 3rd_party
+		#--Download step--------------
+		GIT_REPOSITORY git://git.sv.gnu.org/gsl.git
+		GIT_TAG master
+		#--Configure step-------------
+		CONFIGURE_COMMAND ""
+		#--Build step-----------------
+		BUILD_COMMAND ""
+		#--Install step---------------
+		UPDATE_COMMAND "" # Skip annoying updates for every build
+		INSTALL_COMMAND ""
+	)
+endif()
+
+SET(GSL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/3rd_party/src/GSL/include)
+SET(GSL_LIB_DIR ${CMAKE_CURRENT_BINARY_DIR}/3rd_party/src/GSL/lib)
+
+add_library(GSL SHARED IMPORTED)
+set_target_properties(GSL PROPERTIES IMPORTED_LOCATION ${MUPARSER_LIB_DIR}/libGSL.so)
 
 ExternalProject_Add(CloneBoostVariant
     PREFIX 3rd_party
