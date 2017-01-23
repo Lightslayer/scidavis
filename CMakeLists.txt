@@ -8,17 +8,19 @@ option(BUILD_TESTS "Build tests" OFF)
 option(FIT_PLUGINS "Build fit plugins" ON)
 option(PYTHON_SCRIPTING "Enable Python scripting support" ON)
 
-
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed.
+# Instruct CMake to run moc/uic/rcc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
-# Find the QtWidgets library
-find_package(Qt5Widgets)
+# Find the Qt libraries
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
 
-# Tell CMake to create the helloworld executable
-add_executable(scidavis WIN32 main.cpp)
+# Tell CMake to create the scidavis executable
+add_executable(scidavis main.cpp)
 
 # Subdirs
 add_subdirectory(3rd_party)
@@ -33,15 +35,22 @@ if(FIT_PLUGINS)
     # optional fit plugins
     # mxe is a static build, so these are included elsewhere
     add_subdirectory(fitPlugins)
+	target_link_libraries(scidavis 
+	    libfitRational0
+		libfitRational1 
+		libexplin
+		libexp_saturation
+		libplanck_wavelength)
 endif(FIT_PLUGINS)
 
 # Translations
 set(TRANSLATIONS "")
+set(TRANSLATIONS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/scidavis/translations)
 foreach(LANG de es nl fr ru ja sv pt-br cs cs-alt)
-    set(TRANSLATIONS "${TRANSLATIONS} %{CMAKE_CURRENT_SOURCE_DIR}/scidavis/translations/scidavis_${LANG}.ts")
+    list(APPEND TRANSLATIONS ${TRANSLATIONS_DIR}/scidavis_${LANG}.ts)
 endforeach()
 # Use the Widgets module from Qt 5.
-target_link_libraries(scidavis Qt5::Widgets)
+target_link_libraries(scidavis libscidavis)
 
 ###############################################################################
 ############################### packaging #####################################
